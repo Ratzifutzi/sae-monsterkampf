@@ -8,5 +8,7 @@ namespace Monsterkampf._02_Monsterkampf.Monsters
 {
 	internal class OrkMonster : BaseMonster
 	{
+		public override string MonsterBreed { get; } ="Ork";
+		public override string MonsterIcon { get; } = "🧌";
 	}
 }

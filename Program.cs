@@ -1,4 +1,5 @@
-﻿using Monsterkampf._02_Monsterkampf.Monsters;
+﻿using System.Text;
+using Monsterkampf._02_Monsterkampf.Monsters;
 
 namespace Monsterkampf._02_Monsterkampf
 {
@@ -6,12 +7,16 @@ namespace Monsterkampf._02_Monsterkampf
 	{
 		static void Main(string[] args)
 		{
+			// Set console output encoding to UTF-8 to allow emojis
+			Console.OutputEncoding = Encoding.UTF8;
+
+			// Spawn some monsters
 			OrkMonster myOrk = new OrkMonster();
 
 			for (int i = 0; i < 15; i++)
 			{
-				Console.WriteLine(myOrk.HP);
-				myOrk.HP -= 10;
+				myOrk.Attack(myOrk);
+                Console.WriteLine("");
 			}
 		}
 	}
