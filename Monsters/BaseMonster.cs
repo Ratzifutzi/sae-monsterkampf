@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ namespace Monsterkampf._02_Monsterkampf.Monsters
 		// Override variables
 		public abstract string MonsterBreed { get; } // This is basically their UID
 		public abstract string MonsterIcon { get; } // This is just to prettify the console output
+		public abstract ConsoleColor MonsterColor { get; }
 
 		// Properties
 		public float HP
@@ -48,6 +50,14 @@ namespace Monsterkampf._02_Monsterkampf.Monsters
 		{
 			return $"{this.MonsterIcon} {this.MonsterBreed}";
 		}
+		/// <summary>
+		/// Gets the colored name of the monster
+		/// </summary>
+		/// <returns>the name but colored</returns>
+		public string GetColoredName()
+		{
+			return $"\u001b[38;5;{(int)this.MonsterColor}m{this.GetName()}\u001b[0m";
+		}
 
 		/// <summary>
 		/// Deals damage to the target while taking stats like DP into consideration.
@@ -55,13 +65,15 @@ namespace Monsterkampf._02_Monsterkampf.Monsters
 		/// <param name="target">The monster to attack</param>
 		public virtual void Attack(BaseMonster target)
 		{
-			Console.WriteLine($"⌛ {this.GetName()} tries to strike an attack on {target.GetName()}...");
+			Console.WriteLine($"⌛ {this.GetColoredName()} tries to strike an attack on {target.GetColoredName()}...");
 
 			// Checks if the attack is valid
 			if (target == this) { Console.WriteLine("❌ But they realized that they could not harm themselves..."); return; };
 			if (target.MonsterBreed == this.MonsterBreed) { Console.WriteLine("❌ But realised he cannot harm his own breed..."); return; };
 
-			// Calculate in DefensePoints
+			// Calculate the attack amount
+			float damageToDeal = this.AP;
+			
 
 			target.HP -= AP;
 		}

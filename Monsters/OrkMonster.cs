@@ -10,5 +10,6 @@ namespace Monsterkampf._02_Monsterkampf.Monsters
 	{
 		public override string MonsterBreed { get; } ="Ork";
 		public override string MonsterIcon { get; } = "🧌";
+		public override ConsoleColor MonsterColor { get; } = ConsoleColor.DarkGreen;
 	}
 }
