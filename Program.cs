@@ -15,6 +15,7 @@ namespace Monsterkampf._02_Monsterkampf
 			// Create helper classes instances
 			ValueSelector valueSelector = new ValueSelector();
 			MonsterClassIndex monsterIndex = new MonsterClassIndex();
+			ArenaCreator arenaCreator = new ArenaCreator();
 
 			// Set console output encoding to UTF-8 to allow emojis
 			Console.OutputEncoding = Encoding.UTF8;
@@ -25,13 +26,15 @@ namespace Monsterkampf._02_Monsterkampf
 			////////////////////////////////////////
 
 			// Select the gamemode
-			valueSelector.Create("What gamemode do you want to play?", [
-				"Duel",
-				"[N/A] Team vs. Team",
-				"[N/A] Free for all",
-			]);
+			List<String> arenaModes = ["1v1",
+				"[N/A] TDM",
+				"[N/A] FFA",
+			];
 
-			valueSelector.Create("What monster should join the fight first?", monsterIndex.GetMonsterDictionary().Values.ToList());
+			int arenaModeSelection = valueSelector.Create("What gamemode do you want to play?", arenaModes);
+
+			arenaCreator.InitializeArena(arenaModes[arenaModeSelection]);
+			//valueSelector.Create("What monster should join the fight first?", monsterIndex.GetMonsterDictionary().Values.ToList());
 		}
 	}
 }
