@@ -52,6 +52,16 @@ namespace Monsterkampf.HelperClasses
 
 				// If all checks passed, make the choice to the parsedInput
 				choice = parsedInput - 1;
+
+				int inputLine = Console.GetCursorPosition().Top - 1;
+				ClearLine(inputLine);
+				Console.SetCursorPosition(0, inputLine);
+
+				ConsoleColor oldColor = Console.ForegroundColor;
+				Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine($"{choices[choice]}");
+				Console.ForegroundColor = oldColor;
+
 				ClearLine(Console.GetCursorPosition().Top);
 			}
 

@@ -23,12 +23,15 @@ namespace Monsterkampf._02_Monsterkampf
 			// Set up the console window
 			Console.Title = "Monsterkampf Simulator";
 
+			// Help
+			valueSelector.Create("Would you like to read the introduction?", ["Yes", "No"]);
+
 			////////////////////////////////////////
 
 			// Select the gamemode
-			List<String> arenaModes = ["1v1",
-				"[N/A] TDM",
-				"[N/A] FFA",
+			List<String> arenaModes = [
+				"1v1",
+				"[N/A] TDM"
 			];
 
 			int arenaModeSelection = valueSelector.Create("What gamemode do you want to play?", arenaModes);

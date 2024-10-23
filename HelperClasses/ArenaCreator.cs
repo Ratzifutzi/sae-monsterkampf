@@ -13,7 +13,7 @@ namespace Monsterkampf.HelperClasses
 		{
 			["1v1"] = new Dictionary<string, float>
 			{
-				["MaxTeamSize"] = 10,
+				["MaxTeamSize"] = 1,
 				["MaxTeams"] = 2
 			}
 		};
@@ -27,6 +27,12 @@ namespace Monsterkampf.HelperClasses
 			return new List<List<BaseMonster>>();
 		}
 
+		/// <summary>
+		/// Initializes an army and reads user input
+		/// </summary>
+		/// <param name="arenaType">A string that allows either "1v1" or "TDM"</param>
+		/// <returns>A full army</returns>
+		/// <exception cref="Exception">Army type is not recognized.</exception>
 		public List<List<BaseMonster>> InitializeArena(string arenaType)
 		{
 			// Check if the arena type is valid
@@ -55,11 +61,21 @@ namespace Monsterkampf.HelperClasses
 					var monsters = monsterIndex.GetMonsterDictionary().Values.ToList();
 					selectionOptions.InsertRange(selectionOptions.Count, monsters);
 
-					// Add the cancel option if this is not the first option
+					// Add the finish team option if this is not the first option
 					if (i > 0) { selectionOptions.Add("Finish this team"); }
 
-					valueSelector.Create($"What monster do you want to add to the team #{teamNumber}?", selectionOptions);
-                }
+					// Add the finish army option if this is the 3rd or higher army
+					if (teamNumber > 1) { selectionOptions.Add("Finish the army"); }
+
+					int selectedIndex = valueSelector.Create(
+						$"What monster do you want to add to the team #{teamNumber + 1}?",
+						selectionOptions
+					);
+
+					// Break out of this loop if the finish option was picked
+					if (selectedIndex == monsters.Count + 0) { break; }
+					if (selectedIndex == monsters.Count + 1) { return arena; }
+				}
             }
 
 			return arena;
