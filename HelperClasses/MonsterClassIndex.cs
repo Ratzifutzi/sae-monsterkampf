@@ -15,7 +15,7 @@ namespace Monsterkampf.HelperClasses
 		/// Indexes all the derived types from the BaseMonster Class
 		/// </summary>
 		/// <returns>All derived types from the BaseMonster Class</returns>
-		public static List<Type> IndexMonsterTypes()
+		public List<Type> IndexMonsterTypes()
 		{
 			// The next 3 lines of code were LLM assisted but written down by me and slightly modified.
 			var baseType = typeof(BaseMonster);
@@ -25,10 +25,31 @@ namespace Monsterkampf.HelperClasses
 			return derivedTypes.ToList();
 		}
 
-		public static Dictionary<string, BaseMonster> GetMonsters()
+		/// <summary>
+		/// Gets the monster types and turns it into a dictionary
+		/// </summary>
+		/// <returns>A dictionary where the key is the type and the value is the colored name</returns>
+		public Dictionary<BaseMonster, string> GetMonsterDictionary()
 		{
-			// Get all mi
-			return new Dictionary<string, BaseMonster>();
-		}
+			// Get all types
+			List<Type> allMonsterTypes = IndexMonsterTypes();
+			Dictionary<BaseMonster, string> output = new Dictionary<BaseMonster, string>();
+
+			// Iterate through all types and create an instance for every type
+			foreach (Type monsterType in allMonsterTypes)
+            {
+				// Create the non typed instance
+				object? instance = Activator.CreateInstance(monsterType);
+
+				// Make sure the instance is a base monster or else just ignore it and continue
+				// This also creates the typedInstance variable
+				if (instance is not BaseMonster typedInstance) continue;
+
+				// Add it to the output dict that gets returned at the end
+				output.Add(typedInstance, typedInstance.GetColoredName()); 
+            }
+
+            return output;
+		}	
 	}
 }
