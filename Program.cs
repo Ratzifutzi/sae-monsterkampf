@@ -1,5 +1,8 @@
-﻿using System.Text;
+﻿using System.Reflection;
+using System.Text;
+using System.Threading;
 using Monsterkampf._02_Monsterkampf.Monsters;
+using Monsterkampf.HelperClasses;
 
 namespace Monsterkampf._02_Monsterkampf
 {
@@ -7,11 +10,28 @@ namespace Monsterkampf._02_Monsterkampf
 	{
 		static void Main(string[] args)
 		{
-			// All Mosters
-			List<string> allMonsterNames = [
-				new OrkMonster().GetColoredName(),
-				new TricksterMonster().GetColoredName()
-			];
+			// Get all monsters that derive from the baseMonster automatically and create lists
+			// AI ASSISTED CODE BLOCK START \\
+			//var baseType = typeof(BaseMonster);
+			//var derivedTypes = Assembly.GetExecutingAssembly().GetTypes()
+			//.Where(t => t.IsClass && !t.IsAbstract && baseType.IsAssignableFrom(t));
+
+			//List<string> allMonsterNames = new List<string>();
+			//Dictionary<string, Type> monsterNameToType = new Dictionary<string, Type>();
+
+			//foreach (var type in derivedTypes)
+			//{
+			//	if (typeof(BaseMonster).IsAssignableFrom(type))
+			//	{
+			//		var instance = Activator.CreateInstance(type) as BaseMonster;
+			//		if (instance != null)
+			//		{
+			//			allMonsterNames.Add(instance.GetColoredName());
+			//			monsterNameToType[instance.GetColoredName()] = type;
+			//		}
+			//	}
+			//}
+			// AI ASSISTED CODE BLOCK END \\
 
 			// Setup of the program
 			// Set console output encoding to UTF-8 to allow emojis
@@ -20,9 +40,14 @@ namespace Monsterkampf._02_Monsterkampf
 			// Set up the console window
 			Console.Title = "Monsterkampf Simulator";
 
+			// Set up the arena
+			List<List<BaseMonster>> monsters = new List<List<BaseMonster>>();
 
-			// Get the monsters to fight against eachother
-			new ValueSelector().Create(allMonsterNames);
+            // Get the monsters to fight against eachother
+            //BaseMonster firstMonster = 
+            Console.WriteLine(new ValueSelector().Create( ["Foo", "Bar", "safafsa"], "Test" ) );
+
+			//monsters[0].Add();
 
 			// Spawn some monsters
 			OrkMonster myOrk = new OrkMonster();
