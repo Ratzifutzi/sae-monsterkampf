@@ -31,12 +31,24 @@ namespace Monsterkampf._02_Monsterkampf
 			// Select the gamemode
 			List<String> arenaModes = [
 				"1v1",
-				"[N/A] TDM"
+				"TDM"
 			];
 
 			int arenaModeSelection = valueSelector.Create("What gamemode do you want to play?", arenaModes);
 
-			arenaCreator.InitializeArena(arenaModes[arenaModeSelection]);
+			bool creationSuccessful = false;
+			var arena = arenaCreator.InitializeArena(arenaModes[arenaModeSelection]);
+			if (arena != null) { creationSuccessful = true; };
+
+			while (!creationSuccessful)
+			{
+				arenaCreator.InitializeArena(arenaModes[arenaModeSelection]);
+
+				if(arena != null) { creationSuccessful = true; };
+			}
+
+            Console.WriteLine("\nPerfect! Here is a brief overview of the arena:");
+			arenaCreator.PrettyPrintArena(arena);
 			//valueSelector.Create("What monster should join the fight first?", monsterIndex.GetMonsterDictionary().Values.ToList());
 		}
 	}
