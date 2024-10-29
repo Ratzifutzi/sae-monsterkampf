@@ -8,20 +8,15 @@ namespace Monsterkampf.HelperClasses
 {
 	public class ValueSelector
 	{
-		public static void ClearLine(int line)
+		private void ClearLine(int line)
 		{
 			Console.SetCursorPosition(0, line);
 			Console.Write(new string(' ', Console.WindowWidth));
 			Console.SetCursorPosition(0, line);
 		}
 
-		private void SendErrorMessage()
-		{
-			Console.WriteLine("❌ Please enter the number corresponding to your selection without the dot.");
-
-			int line = Console.GetCursorPosition().Top - 2;
-			ClearLine(line);
-		}
+		// Instance required modules
+		ConsoleHelper consoleHelper = new ConsoleHelper();
 
 		/// <summary>
 		/// Creates a Selector UI, rendering the given choices with the questions
@@ -45,10 +40,10 @@ namespace Monsterkampf.HelperClasses
 				string? input = Console.ReadLine();
 
 				// Parse the input
-				if (input == null) { SendErrorMessage(); continue; };
-				if (!int.TryParse(input, out int parsedInput)) { SendErrorMessage(); continue; };
-				if (choices.Count < parsedInput) { SendErrorMessage(); continue; };
-				if (parsedInput <= 0) { SendErrorMessage(); continue; };
+				if (input == null) { consoleHelper.SendErrorMessage("Please enter at least something."); continue; };
+				if (!int.TryParse(input, out int parsedInput)) { consoleHelper.SendErrorMessage("Please enter a number"); continue; };
+				if (choices.Count < parsedInput) { consoleHelper.SendErrorMessage("Please enter the number corresponding to your selection without the dot."); continue; };
+				if (parsedInput <= 0) { consoleHelper.SendErrorMessage("Please enter the number corresponding to your selection without the dot."); continue; };
 
 				// If all checks passed, make the choice to the parsedInput
 				choice = parsedInput - 1;

@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Monsterkampf.HelperClasses;
 
 namespace Monsterkampf._02_Monsterkampf.Monsters
 {
@@ -14,6 +15,9 @@ namespace Monsterkampf._02_Monsterkampf.Monsters
 		private float attackPoints = 15;
 		private float defensePoints = 5;
 		private float speedPoints = 50;
+
+		// Helper Classes
+		ConsoleHelper consoleHelper = new ConsoleHelper();
 
 		// Override variables
 		public abstract string MonsterBreed { get; } // This is basically their UID
@@ -56,7 +60,20 @@ namespace Monsterkampf._02_Monsterkampf.Monsters
 		/// <returns>the name but colored</returns>
 		public string GetColoredName()
 		{
-			return $"\u001b[38;5;{(int)this.MonsterColor}m{this.GetName()}\u001b[0m";
+			return consoleHelper.GetColoredString(this.GetName(), this.MonsterColor);
+		}
+
+		/// <summary>
+		/// Gets the stats of the monster in an human readable, colored way.
+		/// </summary>
+		/// <returns>Stats of the monster, colored and human readable</returns>
+		public string GetPrettyPrintedStats()
+		{
+			return $"" +
+				$"❤️ {consoleHelper.GetColoredString(this.HP	.ToString(), ConsoleColor.Red)} | " +
+				$"⚔️ {consoleHelper.GetColoredString(this.AP.ToString(), ConsoleColor.White)} |" +
+				$"🛡️ {consoleHelper.GetColoredString(this.DP.ToString(), ConsoleColor.Blue)} | " +
+				$"💨 {consoleHelper.GetColoredString(this.SP.ToString(), ConsoleColor.Gray)}";
 		}
 
 		/// <summary>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Monsterkampf._02_Monsterkampf.Monsters;
@@ -21,6 +22,17 @@ namespace Monsterkampf.HelperClasses
 				["MaxTeamSize"] = 25,
 				["MaxTeams"] = 25
 			},
+		};
+
+		// These values will be used when the arena is being created.
+		// Key is the stat and the value is the question that should be asked
+		// The code will append a " (Default: int)" at the end of the string.
+		private Dictionary<string, string> changeableMonsterParameters = new()
+		{
+			["HP"] = "❤️ How much HP should the monster have?",
+			["AP"] = "⚔️ How much base attack points should the monster have?",
+			["DP"] = "🛡️ How much base defense points should the monster have?",
+			["SP"] = "💨 How fast should the monster be?",
 		};
 
 		/// <summary>
@@ -51,6 +63,7 @@ namespace Monsterkampf.HelperClasses
 			// Instance Helpers
 			ValueSelector valueSelector = new ValueSelector();
 			MonsterClassIndex monsterIndex = new MonsterClassIndex();
+			ConsoleHelper consoleHelper = new ConsoleHelper();
 
 			// Create the arena
 			var arena = this.CreateEmptyArena();
@@ -82,7 +95,7 @@ namespace Monsterkampf.HelperClasses
 					// Check if there are still any monsters to add
 					// Or if the user messed it up and there is a reset needed
 					// This is responsible for the error message, the code that
-					// calls the creator will need to restart the process.
+					// calls the creator will still need to restart the process.
 					if (monsters.Count == 0)
 					{
 						Console.ForegroundColor = ConsoleColor.Yellow;
@@ -104,7 +117,7 @@ namespace Monsterkampf.HelperClasses
 					if (i > 0) { selectionOptions.Add("Finish this team"); }
 
 					// Add the finish army option if this is the 3rd or higher army
-					if (teamNumber > 0 && i > 0) { selectionOptions.Add("Finish the army"); }
+					if (teamNumber > 0 && i > 0) { selectionOptions.Add("Finish the whole setup"); }
 
 					int selectedIndex = valueSelector.Create(
 						$"What monster do you want to add to the team #{teamNumber + 1}?",
@@ -115,9 +128,59 @@ namespace Monsterkampf.HelperClasses
 					if (selectedIndex == monsters.Count + 0) { break; }
 					if (selectedIndex == monsters.Count + 1) { return arena; }
 
-					// Add the selected monster
+					// Create instance of the selected monster
 					var selectedMonsterName = selectionOptions[selectedIndex];
-					arena[teamNumber].Add(monsterIndex.GetMonsterDictionary()[selectedMonsterName]);
+					BaseMonster instancedMonster = monsterIndex.GetMonsterDictionary()[selectedMonsterName];
+
+					// Start the stats selector
+					foreach (var pair in changeableMonsterParameters)
+					{
+						string statName = pair.Key;
+						string baseQuestion = pair.Value;
+
+						PropertyInfo? statInfo = typeof(BaseMonster).GetProperty(statName);
+						if (statInfo == null) throw new Exception();
+
+						var defaultValue = statInfo.GetValue(instancedMonster);
+
+						// Print the question and the default value
+						Console.WriteLine($"{baseQuestion} (Default: {defaultValue})");
+						
+						// Loop to validate input
+						bool validInput = false;
+						while (validInput == false)
+						{
+							// Read user input
+							string? rawUserInput = Console.ReadLine();
+
+							// Just use the default value if the input is empty (User just only ENTER)
+							if(rawUserInput == "")
+							{
+								int currentLine = Console.GetCursorPosition().Top - 1;
+
+								validInput = true;
+								statInfo.SetValue(instancedMonster, defaultValue);
+
+								Console.SetCursorPosition(0, currentLine);
+                                Console.WriteLine(defaultValue);
+
+								continue;
+							}
+
+							// Validate checks
+							if (!int.TryParse(rawUserInput, out int result)) { consoleHelper.SendErrorMessage("Please enter a number"); continue; };
+							if (Math.Clamp(result, 0, 100) != result) { consoleHelper.SendErrorMessage("Please make sure that your input is in the range of 0-100"); continue; }
+							if (statName == "AP" && result == 0) { consoleHelper.SendErrorMessage("AP must be greather than 0"); continue; }
+
+							// Set the selected value
+							statInfo.SetValue(instancedMonster, result);
+
+							validInput = true;
+						}
+					}
+
+					// Add the monster to the arena and the correct team
+					arena[teamNumber].Add(instancedMonster);
 				}
 			}
 
@@ -139,15 +202,15 @@ namespace Monsterkampf.HelperClasses
 
 					if (monsterNumber == team.Count - 1)
 					{
-						Console.WriteLine($"└ {monster.GetColoredName()}");
+						Console.WriteLine($"└ {monster.GetColoredName()} {monster.GetPrettyPrintedStats()}");
 					}
 					else
 					{
-						Console.WriteLine($"├ {monster.GetColoredName()}");
+						Console.WriteLine($"├ {monster.GetColoredName()} {monster.GetPrettyPrintedStats()}");
 					}
 				}
 
-				if(team.Count != 0) Console.WriteLine("");
+				if (team.Count != 0) Console.WriteLine("");
 			}
 		}
 	}

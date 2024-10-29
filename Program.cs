@@ -37,14 +37,13 @@ namespace Monsterkampf._02_Monsterkampf
 			int arenaModeSelection = valueSelector.Create("What gamemode do you want to play?", arenaModes);
 
 			bool creationSuccessful = false;
-			var arena = arenaCreator.InitializeArena(arenaModes[arenaModeSelection]);
-			if (arena != null) { creationSuccessful = true; };
+			var arena = new List<List<BaseMonster>>();
 
 			while (!creationSuccessful)
 			{
-				arenaCreator.InitializeArena(arenaModes[arenaModeSelection]);
+				var createdArena = arenaCreator.InitializeArena(arenaModes[arenaModeSelection]);
 
-				if(arena != null) { creationSuccessful = true; };
+				if(createdArena != null) { creationSuccessful = true; arena = createdArena; };
 			}
 
             Console.WriteLine("\nPerfect! Here is a brief overview of the arena:");
