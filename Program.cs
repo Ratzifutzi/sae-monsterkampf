@@ -25,9 +25,6 @@ namespace Monsterkampf._02_Monsterkampf
 			// Set up the console window
 			Console.Title = "Monsterkampf Simulator";
 
-			// Help
-			valueSelector.Create("Would you like to read the introduction?", ["Yes", "No"]);
-
 			////////////////////////////////////////
 
 			// Select the gamemode
@@ -41,24 +38,24 @@ namespace Monsterkampf._02_Monsterkampf
 			bool creationSuccessful = false;
 			var arena = new List<List<BaseMonster>>();
 
-			//while (!creationSuccessful)
-			//{
-			//	var createdArena = arenaCreator.InitializeArena(arenaModes[arenaModeSelection]);
+			while (!creationSuccessful)
+			{
+				var createdArena = arenaCreator.InitializeArena(arenaModes[arenaModeSelection]);
 
-			//	if (createdArena != null) { creationSuccessful = true; arena = createdArena; };
-			//}
+				if (createdArena != null) { creationSuccessful = true; arena = createdArena; };
+			}
 
 			/////////////////////////////////////////////////////
 			// Test Arena Start
-			arena.Add(new List<BaseMonster>());
-			arena.Add(new List<BaseMonster>());
+			//arena.Add(new List<BaseMonster>());
+			//arena.Add(new List<BaseMonster>());
 
-			OrkMonster ork = new OrkMonster();
-			TricksterMonster trickster = new TricksterMonster();
+			//OrkMonster ork = new OrkMonster();
+			//TricksterMonster trickster = new TricksterMonster();
 
-			arena[0].Add(ork);
-			arena[0].Add(new OrkMonster());
-			arena[1].Add(trickster);
+			//arena[0].Add(ork);
+			//arena[0].Add(new OrkMonster());
+			//arena[1].Add(trickster);
 			// Test Arena End
 			/////////////////////////////////////////////////////
 
@@ -119,7 +116,6 @@ namespace Monsterkampf._02_Monsterkampf
 
 					// Empty line + a small delay
 					Console.WriteLine("");
-					Thread.Sleep(50);
 				}
 
 				// Print the current game arena(the state) at the footer
