@@ -22,7 +22,7 @@ namespace Monsterkampf._02_Monsterkampf.Monsters
 		// Override variables
 		public abstract string MonsterBreed { get; } // This is basically their UID
 		public abstract string MonsterIcon { get; } // This is just to prettify the console output
-		public abstract ConsoleColor MonsterColor { get; }
+		public abstract ConsoleColor MonsterColor { get; } // The color of the monster displayed in the terminal
 
 		// Properties
 		public float HP
@@ -45,6 +45,10 @@ namespace Monsterkampf._02_Monsterkampf.Monsters
 			get { return speedPoints; }
 			set { speedPoints = value; }
 		}
+
+
+		//////////////////////////////////////////////////
+
 
 		/// <summary>
 		/// Gets the name of the monster in a prettified way
@@ -76,6 +80,14 @@ namespace Monsterkampf._02_Monsterkampf.Monsters
 				$"💨 {consoleHelper.GetColoredString(this.SP.ToString(), ConsoleColor.Gray)}";
 		}
 
+
+		//////////////////////////////////////////////////
+
+
+		private float calculateAttackDamage(BaseMonster target)
+		{
+			return Math.Max(this.AP - target.DP, 0);
+		}
 		/// <summary>
 		/// Deals damage to the target while taking stats like DP into consideration.
 		/// </summary>
@@ -89,10 +101,14 @@ namespace Monsterkampf._02_Monsterkampf.Monsters
 			if (target.MonsterBreed == this.MonsterBreed) { Console.WriteLine("❌ But realised he cannot harm his own breed..."); return; };
 
 			// Calculate the attack amount
-			float damageToDeal = this.AP;
-			
+			float damageToDeal = calculateAttackDamage(target);
 
-			target.HP -= AP;
+            Console.WriteLine($"💔 The attack on {target.GetColoredName()} was successful and dealt " +
+				$"{consoleHelper.GetColoredString(damageToDeal.ToString(), ConsoleColor.Red)} damage.");
+
+			// Deal damage and hurt shield
+			target.HP -= damageToDeal;
+			if(target.DP > 0) { target.DP -= 1; };
 		}
 	}
 }

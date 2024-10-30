@@ -186,32 +186,5 @@ namespace Monsterkampf.HelperClasses
 
 			return arena;
 		}
-
-		public void PrettyPrintArena(List<List<BaseMonster>> arenaToPrint)
-		{
-			foreach (var team in arenaToPrint)
-			{
-				int teamNumber = arenaToPrint.IndexOf(team);
-
-				if (team.Count == 0) continue;
-				Console.WriteLine($"┌ Team #{teamNumber + 1}");
-
-				foreach (BaseMonster monster in team)
-				{
-					int monsterNumber = team.IndexOf(monster);
-
-					if (monsterNumber == team.Count - 1)
-					{
-						Console.WriteLine($"└ {monster.GetColoredName()} {monster.GetPrettyPrintedStats()}");
-					}
-					else
-					{
-						Console.WriteLine($"├ {monster.GetColoredName()} {monster.GetPrettyPrintedStats()}");
-					}
-				}
-
-				if (team.Count != 0) Console.WriteLine("");
-			}
-		}
 	}
 }
